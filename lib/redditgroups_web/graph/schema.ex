@@ -14,12 +14,6 @@ defmodule RedditgroupsWeb.Schema do
     filed(:description, :string)
   end
 
-  object :user do
-    field(:id, non_null(:id))
-    field(:name, non_null(:string))
-    field(:groups, non_null(list_of(non_null(:group))))
-  end
-
   object :thread do
     field(:url, non_null(:string))
     field(:title, non_null(:string))
