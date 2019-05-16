@@ -9,3 +9,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias Redditgroups.Groups.Group
+alias Redditgroups.Repo
+
+%Group{name: "Test Group"} |> Repo.insert!()
+%Group{name: "Another Test Group"} |> Repo.insert!()

@@ -1,10 +1,10 @@
 defmodule RedditgroupsWeb.Resolvers do
-  alias Community.News
+  alias Redditgroups.Groups
 
   def groups(_root, _args, _info) do
     # TODO: return groups for the current user
     # (or a hardcoded one)
-    {:ok, []}
+    {:ok, Groups.list_groups()}
   end
 
   def feed(_root, _args, _info) do
@@ -20,15 +20,11 @@ defmodule RedditgroupsWeb.Resolvers do
   end
 
   def create_group(_root, args, _info) do
-    # TODO: return list of subreddits based on
-    # some query. Go out to reddit for this
-    {:ok,
-     %{id: 1, name: args.name, subreddits: Enum.map(args.subreddits, fn o -> %{name: o} end)}}
+    {:ok, Groups.create_group_with_subreddits(args)}
   end
 
   def update_group(_root, args, _info) do
-    # TODO: return list of subreddits based on
-    # some query. Go out to reddit for this
+    # TODO: implementation
     {:ok,
      %{
        id: args.id,
