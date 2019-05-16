@@ -18,4 +18,22 @@ defmodule RedditgroupsWeb.Resolvers do
     # some query. Go out to reddit for this
     {:ok, []}
   end
+
+  def create_group(_root, args, _info) do
+    # TODO: return list of subreddits based on
+    # some query. Go out to reddit for this
+    {:ok,
+     %{id: 1, name: args.name, subreddits: Enum.map(args.subreddits, fn o -> %{name: o} end)}}
+  end
+
+  def update_group(_root, args, _info) do
+    # TODO: return list of subreddits based on
+    # some query. Go out to reddit for this
+    {:ok,
+     %{
+       id: args.id,
+       name: args.name,
+       subreddits: Enum.map(args.subreddits, fn o -> %{name: o} end)
+     }}
+  end
 end

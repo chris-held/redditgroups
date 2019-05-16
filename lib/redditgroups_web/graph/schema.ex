@@ -40,4 +40,21 @@ defmodule RedditgroupsWeb.Schema do
       resolve(&Resolvers.subreddits/3)
     end
   end
+
+  mutation do
+    field :create_group, :group do
+      arg(:name, non_null(:string))
+      arg(:subreddits, non_null(list_of(:string)))
+
+      resolve(&Resolvers.create_group/3)
+    end
+
+    field :update_group, :group do
+      arg(:id, non_null(:id))
+      arg(:name, non_null(:string))
+      arg(:subreddits, non_null(list_of(:string)))
+
+      resolve(&Resolvers.update_group/3)
+    end
+  end
 end
