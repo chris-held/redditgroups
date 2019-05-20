@@ -9,6 +9,7 @@ defmodule Redditgroups.Groups do
   alias Redditgroups.Groups.Group
   alias Redditgroups.Groups.Subreddit
 
+  # TODO: should use changesets here to support validation
   def create_group_with_subreddits(attrs \\ %{}) do
     Repo.insert!(%Group{
       name: attrs.name,
