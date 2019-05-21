@@ -1,5 +1,6 @@
 defmodule RedditgroupsWeb.Resolvers do
   alias Redditgroups.Groups
+  alias Redditgroups.Services
 
   def groups(_root, _args, _info) do
     # TODO: return groups for the current user
@@ -7,10 +8,12 @@ defmodule RedditgroupsWeb.Resolvers do
     {:ok, Groups.list_groups()}
   end
 
-  def feed(_root, _args, _info) do
-    # TODO: return feed for the current user's groups
-    # or specified group. Will need to call out to reddit for this
-    {:ok, []}
+  def feed(_root, %{group_id: group_id}, _info) do
+    # TODO: return feed for the passed in group
+    # get group and map it's subreddits to an array
+    # to pass to the reddit service
+    result = Services.get_reddit_feed(["mkebucks", "nba"])
+    {:ok, result}
   end
 
   def subreddits(_root, _args, _info) do
