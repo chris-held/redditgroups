@@ -18,7 +18,7 @@ defmodule RedditgroupsWeb.Schema do
     field(:url, non_null(:string))
     field(:title, non_null(:string))
     field(:image_url, :string)
-    field(:subreddit, :subreddit)
+    field(:subreddit, :string)
   end
 
   query do
@@ -27,6 +27,7 @@ defmodule RedditgroupsWeb.Schema do
     end
 
     field :feed, list_of(:thread) do
+      arg(:group_id, non_null(:id))
       resolve(&Resolvers.feed/3)
     end
 
