@@ -12,7 +12,8 @@ defmodule RedditgroupsWeb.Resolvers do
     # TODO: return feed for the passed in group
     # get group and map it's subreddits to an array
     # to pass to the reddit service
-    result = Services.get_reddit_feed(["mkebucks", "nba"])
+    group = Groups.get_group!(group_id)
+    result = Services.get_reddit_feed(Enum.map(group.subreddits, fn s -> s.name end))
     {:ok, result}
   end
 

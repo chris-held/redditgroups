@@ -10,6 +10,7 @@ defmodule Redditgroups.Groups do
   alias Redditgroups.Groups.Subreddit
 
   # TODO: should use changesets here to support validation
+  @spec create_group_with_subreddits(atom() | %{name: any(), subreddits: any()}) :: any()
   def create_group_with_subreddits(attrs \\ %{}) do
     Repo.insert!(%Group{
       name: attrs.name,
@@ -44,7 +45,10 @@ defmodule Redditgroups.Groups do
       ** (Ecto.NoResultsError)
 
   """
-  def get_group!(id), do: Repo.get!(Group, id)
+  def get_group!(id) do
+    Repo.get!(Group, id)
+    |> Repo.preload(:subreddits)
+  end
 
   @doc """
   Creates a group.
