@@ -4,7 +4,7 @@ defmodule Redditgroups.Groups.Group do
 
   schema "groups" do
     field(:name, :string)
-    has_many(:subreddits, Redditgroups.Groups.Subreddit)
+    field(:subreddits, {:array, :string})
 
     timestamps()
   end
@@ -12,7 +12,7 @@ defmodule Redditgroups.Groups.Group do
   @doc false
   def changeset(group, attrs) do
     group
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :subreddits])
+    |> validate_required([:name, :subreddits])
   end
 end

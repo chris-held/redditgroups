@@ -6,12 +6,7 @@ defmodule RedditgroupsWeb.Schema do
   object :group do
     field(:id, non_null(:id))
     field(:name, non_null(:string))
-    field(:subreddits, non_null(list_of(non_null(:subreddit))))
-  end
-
-  object :subreddit do
-    field(:name, non_null(:string))
-    filed(:description, :string)
+    field(:subreddits, non_null(list_of(:string)))
   end
 
   object :thread do
@@ -31,7 +26,7 @@ defmodule RedditgroupsWeb.Schema do
       resolve(&Resolvers.feed/3)
     end
 
-    field :subreddits, list_of(:subreddit) do
+    field :subreddits, list_of(:string) do
       resolve(&Resolvers.subreddits/3)
     end
   end
@@ -50,6 +45,12 @@ defmodule RedditgroupsWeb.Schema do
       arg(:subreddits, non_null(list_of(:string)))
 
       resolve(&Resolvers.update_group/3)
+    end
+
+    field :delete_group, :group do
+      arg(:id, non_null(:id))
+
+      resolve(&Resolvers.delete_group/3)
     end
   end
 end
