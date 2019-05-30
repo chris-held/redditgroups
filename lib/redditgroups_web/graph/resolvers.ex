@@ -13,7 +13,7 @@ defmodule RedditgroupsWeb.Resolvers do
     # get group and map it's subreddits to an array
     # to pass to the reddit service
     group = Groups.get_group!(group_id)
-    result = Services.get_reddit_feed(Enum.map(group.subreddits, fn s -> s.name end))
+    result = Services.get_reddit_feed(group.subreddits)
     {:ok, result}
   end
 
@@ -24,16 +24,15 @@ defmodule RedditgroupsWeb.Resolvers do
   end
 
   def create_group(_root, args, _info) do
-    {:ok, Groups.create_group_with_subreddits(args)}
+    Groups.create_group(args)
   end
 
   def update_group(_root, args, _info) do
-    # TODO: implementation
-    {:ok,
-     %{
-       id: args.id,
-       name: args.name,
-       subreddits: Enum.map(args.subreddits, fn o -> %{name: o} end)
-     }}
+    Groups.update_group(Groups.get_group!(args.id), args)
+  end
+
+  def delete_group(_root, %{id: id}, _info) do
+    group = Groups.get_group!(id)
+    Groups.delete_group(group)
   end
 end
