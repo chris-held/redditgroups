@@ -4,24 +4,29 @@ defmodule Redditgroups.Services.Reddit do
   plug(Tesla.Middleware.BaseUrl, "https://www.reddit.com/r/")
   plug(Tesla.Middleware.JSON)
 
-  def get_feeds(feeds) do
-    # TODO: - get a list for each feed
-    # a feed object will need a name, and optional
-    # pagination stuff (maybe add that later)
-    # these will have to be pulled down
-    # async and ordered by date
-    Enum.flat_map(feeds, fn feed ->
-      {:ok, response} = get("#{feed.name}.json")
+  defp get_feed_for_subreddit(subreddit) do
+    case get("#{subreddit.name}.json") do
+      {:ok, response} ->
+        Enum.map(response.body["data"]["children"], fn o ->
+          %{
+            title: o["data"]["title"],
+            url: o["data"]["url"],
+            score: o["data"]["score"],
+            subreddit: o["data"]["subreddit"]
+          }
+        end)
 
-      Enum.map(response.body["data"]["children"], fn o ->
-        %{
-          title: o["data"]["title"],
-          url: o["data"]["url"],
-          score: o["data"]["score"],
-          subreddit: o["data"]["subreddit"]
-        }
-      end)
+      {:error, error} ->
+        IO.puts("Error querying subreddit #{subreddit.name}: #{inspect(error)}")
+        []
+    end
+  end
+
+  def get_feeds(feeds) do
+    Enum.map(feeds, fn feed ->
+      Task.async(fn -> get_feed_for_subreddit(feed) end)
     end)
+    |> Enum.flat_map(&Task.await/1)
     |> Enum.sort_by(fn o -> o.score end, &>=/2)
   end
 end
