@@ -22,8 +22,6 @@ defmodule Redditgroups.Services.Reddit do
     end
   end
 
-  # TODO: need to make these requests run concurrently to improve performance
-  # get_feed_for_subreddit seems to fire off async but seems to return serially
   def get_feeds(feeds) do
     Enum.map(feeds, fn feed ->
       Task.async(fn -> get_feed_for_subreddit(feed) end)
